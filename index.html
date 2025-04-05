@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Google Maps Marker Tracker</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDRaOVCxuuqdGcARvYg1he4yHsaNB1QLH8"></script>
+    <style>
+      body, html {
+        height: 100%;
+        margin: 0;
+        font-family: Arial, sans-serif;
+      }
+
+      #container {
+        display: flex;
+        height: 100vh;
+      }
+
+      #map {
+        flex: 2;
+        height: 100%;
+      }
+
+      #marker-list {
+        flex: 1;
+        padding: 10px;
+        overflow-y: auto;
+        background-color: #f5f5f5;
+        border-left: 2px solid #ddd;
+      }
+
+      .coord {
+        margin-bottom: 10px;
+        padding: 20px;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <div id="map"></div>
+      <div id="marker-list">
+        <h2><center>Marker Coordinates</center></h2>
+        <div id="coords"></div>
+      </div>
+    </div>
+
+    <script>
+      let map;
+
+      function initMap() {
+        const startLocation = { lat: 40.4237, lng: -86.9212 }; // Example: Current Location (Purdue)
+
+        map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 8,
+          center: startLocation,
+        });
+
+        map.addListener("click", (event) => {
+          addMarker(event.latLng);
+        });
+      }
+
+      function addMarker(location) {
+        new google.maps.Marker({
+          position: location,
+          map: map,
+        });
+
+        map.panTo(location);
+
+        const coordDiv = document.createElement("div");
+        coordDiv.className = "coord";
+        coordDiv.textContent = `Latitude: ${location.lat().toFixed(8)}, Longitude: ${location.lng().toFixed(8)}`;
+        document.getElementById("coords").appendChild(coordDiv);
+      }
+
+      window.onload = initMap;
+    </script>
+  </body>
+</html>
